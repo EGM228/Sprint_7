@@ -2,12 +2,14 @@ package org.example;
 
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 
 import java.net.HttpURLConnection;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertNotNull;
 
 public class OrderClient {
     private static final String BASE_URI = "https://qa-scooter.praktikum-services.ru";
@@ -77,12 +79,14 @@ public class OrderClient {
     }
 
     @Step("check of courier orders")
-    public Object checkCourierOrders(int courierId) {
-        return given().log().all()
+    public void checkCourierOrders(int courierId) {
+        String body = given().log().all()
                 .contentType(ContentType.JSON)
                 .baseUri(BASE_URI)
                 .when()
                 .get(ORDER_PATH + "?courierId=" + courierId)
-                .body().as(Object.class);
+                .then().log().all()
+                .extract().response().getBody().asString();
+        assertNotNull(body);
     }
 }

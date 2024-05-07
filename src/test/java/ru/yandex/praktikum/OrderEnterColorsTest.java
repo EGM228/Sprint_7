@@ -1,7 +1,9 @@
 package ru.yandex.praktikum;
 
+import com.github.javafaker.Faker;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.example.Order;
 import org.example.OrderClient;
 import org.junit.After;
@@ -12,42 +14,37 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 @RunWith(Parameterized.class)
 public class OrderEnterColorsTest {
 
-    private int track;
+    private Faker faker = new Faker();
+    private Random random = new Random();
     private final OrderClient client = new OrderClient();
-    private String firstName;
-    private String lastName;
-    private String address;
-    private int metro;
-    private String phone;
-    private int rent;
-    private String date;
-    private String comment;
+    private int track;
+    private String firstName = faker.name().firstName();
+    private String lastName = faker.name().lastName();
+    private String address = faker.address().streetAddress();
+    private int metro = random.nextInt(12) + 1;
+    private String phone = faker.phoneNumber().cellPhone();
+    private int rent = random.nextInt(7) + 1;
+    private String date = "2024-06-06";
+    private String comment = RandomStringUtils.randomAlphabetic(5,15);
     private String[] color;
 
-    public OrderEnterColorsTest(String firstName, String lastName, String address, int metro, String phone, int rent, String date, String comment, String[] color) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.metro = metro;
-        this.phone = phone;
-        this.rent = rent;
-        this.date = date;
-        this.comment = comment;
+    public OrderEnterColorsTest(String[] color) {
         this.color = color;
     }
 
     @Parameterized.Parameters
     public static Object[][] dataForTests() {
         return new Object[][] {
-                { "Kenpachi", "Zaraki", "Gotei", 11, "+78005553535", 3, "2024-06-06", "Strongest", new String[]{"GREY"}},
-                { "Mayuri", "Kurotsuchi", "Gotei", 12, "+79345673425", 4, "2024-06-06", "Smartest", new String[]{"BLACK"}},
-                { "Yachiru", "Unohana", "Gotei", 4, "+79341373426", 1, "2024-06-06", "First", new String[]{"BLACK", "GREY"}},
-                { "Byakuya", "Kuchiki", "Gotei", 6, "+79345653765", 2, "2024-06-06", "Calmest", new String[]{}}
+                {new String[]{"GREY"}},
+                {new String[]{"BLACK"}},
+                {new String[]{"BLACK", "GREY"}},
+                {new String[]{}}
         };
     }
 

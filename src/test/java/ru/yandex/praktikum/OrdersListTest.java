@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class OrdersListTest {
     private final CourierClient courierClient = new CourierClient();
@@ -40,8 +41,7 @@ public class OrdersListTest {
 
         orderClient.courierTakeOrder(idOrder, courierId);
 
-        Object info = orderClient.checkCourierOrders(courierId);
-        assertNotEquals(info,null);
+        orderClient.checkCourierOrders(courierId);
     }
 
     @After
